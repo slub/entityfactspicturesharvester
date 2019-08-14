@@ -35,6 +35,6 @@ If you run into '429' responses ("too many requests", see, e.g., [HTTP status co
 ### Install system-wide via pip
 
 ```
-sudo -H pip3 install --upgrade [ABSOLUTE PATH TO YOUR LOCAL GIT REPOSITORY OF ENTITYFACTSSHEETSHARVESTER]
+sudo -H pip3 install --upgrade [ABSOLUTE PATH TO YOUR LOCAL GIT REPOSITORY OF ENTITYFACTSPICTURESHARVESTER]
 ```
 (which provides you ```entityfactssheetsharvester``` as a system-wide commandline command)
