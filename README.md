@@ -24,6 +24,12 @@ optional arguments:
 
 ### Note
 
+Each (found) picture will be stored with the following pattern: ```image_[GND IDENTIFIER].[ORIGINAL FILE ENDING]```, e.g., ```image_116458461.jpg``` (GND identfier = 116458461; file ending = jpg)
+ 
+Each (found) thumbnail will be stored with the following pattern: ```thumbnail_[GND IDENTIFIER].[ORIGINAL FILE ENDING]```, e.g., ```thumbnail_172323940.png``` (GND identfier = 172323940; file ending = png)
+
+#### 429 responses
+
 If you run into '429' responses ("too many requests", see, e.g., [HTTP status code 429 at httpstatuses.com](https://httpstatuses.com/429)), then you may try to reduce the number of threads of the thread pool schedulers (line 31 and 32) and/or enable (+ (optionally) setup) the time delays before emitting the picture/thumbnail URLs (line 68 and 146) and/or before doing a request (line 157).
 
 ## Run
