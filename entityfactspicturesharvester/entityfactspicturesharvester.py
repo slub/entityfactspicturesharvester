@@ -237,7 +237,7 @@ def do_harvesting(source_obs,
 
 def run():
     parser = argparse.ArgumentParser(prog='entityfactspicturesharvester',
-                                     description='Reads depiction information (images URLs) from given EntityFacts sheets (as line-delimited JSON records) and retrieves and stores them.',
+                                     description='Reads depiction information (images URLs) from given EntityFacts sheets (as line-delimited JSON records) and retrieves and stores the pictures and thumbnails contained in this information.',
                                      epilog='example: entityfactspicturesharvester < [INPUT LINE-DELIMITED JSON FILE WITH ENTITYFACTS SHEETS]',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 

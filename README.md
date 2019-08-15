@@ -1,6 +1,6 @@
 # entityfactspicturesharvester - EntityFacts pictures harvester
 
-entityfactspicturesharvester is a commandline command (Python3 program) that reads depiction information (images URLs) from given [EntityFacts](https://www.dnb.de/EN/Professionell/Metadatendienste/Datenbezug/Entity-Facts/entity-facts_node.html) sheets* (as line-delimited JSON records) and retrieves and stores them
+entityfactspicturesharvester is a commandline command (Python3 program) that reads depiction information (images URLs) from given [EntityFacts](https://www.dnb.de/EN/Professionell/Metadatendienste/Datenbezug/Entity-Facts/entity-facts_node.html) sheets* (as line-delimited JSON records) and retrieves and stores the pictures and thumbnails contained in this information
 
 *) EntityFacts are "fact sheets" on entities of the Integrated Authority File ([GND](https://www.dnb.de/EN/Professionell/Standardisierung/GND/gnd_node.html)), which is provided by German National Library ([DNB](https://www.dnb.de/EN/Home/home_node.html))
 
