@@ -17,6 +17,9 @@ from rx.scheduler import ThreadPoolScheduler
 USER_AGENT_HTTP_HEADER_KEY = 'user-agent'
 # to respect User Agent policy for Wikimedia sites, see https://meta.wikimedia.org/wiki/User-Agent_policy
 USER_AGENT_PATTERN = "entityfactspicturesharvester-bot-from-{0}/0.0.1 (https://github.com/slub/entityfactspicturesharvester; zazi@smiy.org) entityfactspicturesharvester/0.0.1"
+HOSTNAME = socket.getfqdn()
+USER_AGENT = USER_AGENT_PATTERN.format(HOSTNAME)
+HTTP_HEADERS = {USER_AGENT_HTTP_HEADER_KEY: USER_AGENT}
 SLASH = "/"
 DOT = "."
 QUESTION_MARK = "?"
@@ -149,14 +152,14 @@ def get_thumbnail_url(depiction_json, gnd_identifier):
     return result_tuple
 
 
-def do_request(image_uri, gnd_identifier, content_type, http_headers):
+def do_request(image_uri, gnd_identifier, content_type):
     eprint(
         "try to retrieve {0} for GND identifier '{1}' from URL '{2}' (thread = '{3}')".format(content_type,
                                                                                               gnd_identifier,
                                                                                               image_uri,
                                                                                               current_thread().name))
     # time.sleep(2)
-    response = requests.get(image_uri, headers=http_headers, timeout=60)
+    response = requests.get(image_uri, headers=HTTP_HEADERS, timeout=60)
     if response.status_code != 200:
         content = response.content.decode('utf-8')
         eprint("couldn't fetch {0} for GND identifier '{1}' from URL '{2}' got a '{3}' ('{4}') (thread = '{5}')".format(
@@ -170,18 +173,17 @@ def do_request(image_uri, gnd_identifier, content_type, http_headers):
     return response_body
 
 
-def retrieve_content_obs(request_url_tuple, files_directory, content_type, http_headers):
+def retrieve_content_obs(request_url_tuple, files_directory, content_type):
     file_name = request_url_tuple[1]
     absolute_file_path = os.path.join(files_directory, file_name)
     input_tuple = (request_url_tuple[0], absolute_file_path, request_url_tuple[2])
     return rx.of(input_tuple).pipe(op.map(lambda r_url_tuple: retrieve_content(r_url_tuple[0], r_url_tuple[1],
-                                                                               r_url_tuple[2], content_type,
-                                                                               http_headers)),
+                                                                               r_url_tuple[2], content_type)),
                                    op.filter(lambda value1: value1 is not None))
 
 
-def retrieve_content(request_url, absolute_file_path, gnd_identifier, content_type, http_headers):
-    response = do_request(request_url, gnd_identifier, content_type, http_headers)
+def retrieve_content(request_url, absolute_file_path, gnd_identifier, content_type):
+    response = do_request(request_url, gnd_identifier, content_type)
     if response is None:
         return None
     response_tuple = (response, absolute_file_path, gnd_identifier)
@@ -215,7 +217,6 @@ def push_input(observer, scheduler):
 
 def do_harvesting(source_obs,
                   get_url_function,
-                  http_headers,
                   content_type,
                   files_directory,
                   harvesting_scheduler):
@@ -223,7 +224,7 @@ def do_harvesting(source_obs,
         op.map(lambda depiction_json_tuple: get_url_function(depiction_json_tuple[0],
                                                              depiction_json_tuple[1])),
         op.filter(lambda value: value is not None),
-        op.map(lambda url_tuple: retrieve_content_obs(url_tuple, files_directory, content_type, http_headers)),
+        op.map(lambda url_tuple: retrieve_content_obs(url_tuple, files_directory, content_type)),
         op.map(lambda response_tuple_obs: write_content_to_file_obs(response_tuple_obs, content_type)),
         op.flat_map(lambda x: x))
 
@@ -259,10 +260,6 @@ def run():
 
     entityfacts_pictures_directory = args.entityfacts_pictures_directory
 
-    hostname = socket.getfqdn()
-    user_agent = USER_AGENT_PATTERN.format(hostname)
-    http_headers = {USER_AGENT_HTTP_HEADER_KEY: user_agent}
-
     source = rx.create(push_input)
 
     depiction_json_connectable_obs = source.pipe(op.map(lambda line: get_depiction_json(line)),
@@ -272,7 +269,6 @@ def run():
     # picture harvesting
     do_harvesting(depiction_json_connectable_obs,
                   get_picture_url,
-                  http_headers,
                   PICTURE_CONTENT_TYPE,
                   entityfacts_pictures_directory,
                   PICTURE_THREAD_POOL_SCHEDULER)
@@ -280,7 +276,6 @@ def run():
     # thumbnail harvesting
     do_harvesting(depiction_json_connectable_obs,
                   get_thumbnail_url,
-                  http_headers,
                   THUMBNAIL_CONTENT_TYPE,
                   entityfacts_pictures_directory,
                   THUMBNAIL_THREAD_POOL_SCHEDULER)
