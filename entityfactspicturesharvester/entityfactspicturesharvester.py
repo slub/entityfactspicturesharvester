@@ -15,6 +15,7 @@ from rx.scheduler import ThreadPoolScheduler
 # import time
 
 USER_AGENT_HTTP_HEADER_KEY = 'user-agent'
+# to respect User Agent policy for Wikimedia sites, see https://meta.wikimedia.org/wiki/User-Agent_policy
 USER_AGENT_PATTERN = "entityfactspicturesharvester-bot-from-{0}/0.0.1 (https://github.com/slub/entityfactspicturesharvester; zazi@smiy.org) entityfactspicturesharvester/0.0.1"
 SLASH = "/"
 DOT = "."
