@@ -38,3 +38,8 @@ If you run into '429' responses ("too many requests", see, e.g., [HTTP status co
 sudo -H pip3 install --upgrade [ABSOLUTE PATH TO YOUR LOCAL GIT REPOSITORY OF ENTITYFACTSPICTURESHARVESTER]
 ```
 (which provides you ```entityfactssheetsharvester``` as a system-wide commandline command)
+
+## See Also
+
+* [entityfactssheetsharvester](https://github.com/slub/entityfactssheetsharvester) - a commandline command (Python3 program) that retrieves EntityFacts sheets from a given CSV with GND identifiers and returns them as line-delimited JSON records
+* [entityfactspicturesmetadataharvester](https://github.com/slub/entityfactspicturesmetadataharvester) - a commandline command (Python3 program) that reads depiction information (images URLs) from given EntityFacts sheets (as line-delimited JSON records) and retrieves the (Wikimedia Commons file) metadata of these pictures (as line-delimited JSON records)
